@@ -6,6 +6,12 @@ class DeepSeekClient:
     """Client for interacting with DeepSeek AI API"""
 
     def __init__(self):
+        # Remove any proxy environment variables that might interfere
+        import os
+        proxy_vars = ['http_proxy', 'https_proxy', 'HTTP_PROXY', 'HTTPS_PROXY']
+        for var in proxy_vars:
+            os.environ.pop(var, None)
+
         self.client = openai.OpenAI(
             api_key=config.DEEPSEEK_API_KEY,
             base_url="https://api.deepseek.com"
