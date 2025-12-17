@@ -778,4 +778,15 @@ URL LIST:
 if __name__ == '__main__':
     print("Starting web interface...")
     print("Open http://localhost:5000 in your browser")
-    app.run(debug=True, host='0.0.0.0', port=5000)
+
+    # Check for required environment variables
+    if not os.getenv('DEEPSEEK_API_KEY'):
+        print("WARNING: DEEPSEEK_API_KEY not set. URL filtering will not work.")
+        print("Set it in .env file or environment variables.")
+
+    try:
+        app.run(debug=False, host='0.0.0.0', port=5000)
+    except Exception as e:
+        print(f"Error starting server: {e}")
+        import traceback
+        traceback.print_exc()
