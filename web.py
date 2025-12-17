@@ -706,7 +706,9 @@ Exclude:
 - Blog pages (/blogs/)
 - Any other non-product pages
 
-Return ONLY a JSON array of product URLs, like: ["https://example.com/products/item1", "https://example.com/products/item2"]
+IMPORTANT: Remove duplicate URLs that represent the same product in different languages (e.g., keep only one of /products/item and /de/products/item).
+
+Return ONLY a JSON array of unique product URLs, like: ["https://example.com/products/item1", "https://example.com/products/item2"]
 
 URL LIST:
 {urls_content}
