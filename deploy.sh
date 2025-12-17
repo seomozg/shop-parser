@@ -8,14 +8,30 @@ echo "🚀 Starting Shop Parser deployment..."
 
 # Check if Docker is installed
 if ! command -v docker &> /dev/null; then
-    echo "❌ Docker is not installed. Please install Docker first."
-    exit 1
+    echo "❌ Docker is not installed."
+    if [ -f "install-docker.sh" ]; then
+        echo "🔧 Running Docker installation script..."
+        bash install-docker.sh
+    else
+        echo "Please install Docker first or run the installation script."
+        exit 1
+    fi
 fi
 
-# Check if docker-compose is installed
-if ! command -v docker-compose &> /dev/null; then
-    echo "❌ docker-compose is not installed. Please install docker-compose first."
-    exit 1
+# Check if docker-compose is available (either standalone or plugin)
+if command -v docker-compose &> /dev/null; then
+    DOCKER_COMPOSE_CMD="docker-compose"
+elif docker compose version &> /dev/null; then
+    DOCKER_COMPOSE_CMD="docker compose"
+else
+    echo "❌ docker-compose is not available. Installing..."
+    if command -v apt &> /dev/null; then
+        sudo apt update && sudo apt install -y docker-compose-plugin
+        DOCKER_COMPOSE_CMD="docker compose"
+    else
+        echo "Please install docker-compose manually."
+        exit 1
+    fi
 fi
 
 # Create output directory if it doesn't exist

@@ -229,6 +229,18 @@ python main.py https://example.com
 
 Open http://localhost:5000 for web interface.
 
+### 🔑 DeepSeek API Setup
+
+1. Go to [DeepSeek Platform](https://platform.deepseek.com/)
+2. Sign up or log in
+3. Create an API key
+4. Copy the key to your `.env` file:
+   ```
+   DEEPSEEK_API_KEY=sk-your-actual-api-key-here
+   ```
+
+**Note**: The free tier includes 1 million tokens, which is sufficient for testing.
+
 ### Docker Deployment
 
 ```bash
