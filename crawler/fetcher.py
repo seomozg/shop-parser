@@ -10,7 +10,10 @@ class PageFetcher:
 
     def __enter__(self):
         self.playwright = sync_playwright().start()
-        self.browser = self.playwright.chromium.launch()
+        # Use system Chromium instead of downloading Playwright's browser
+        self.browser = self.playwright.chromium.launch(
+            executable_path="/usr/bin/chromium"  # System Chromium path
+        )
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
