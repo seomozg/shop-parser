@@ -244,12 +244,27 @@ Open http://localhost:5000 for web interface.
 ### Docker Deployment
 
 ```bash
+# Quick install Docker (Ubuntu/Debian)
+sudo snap install docker
+sudo snap start docker
+
+# Configure API key
+cp .env.example .env
+# Edit .env with your DeepSeek API key
+
 # Build and run with Docker Compose
 docker-compose up -d
 
 # Or build manually
 docker build -t shop-parser .
 docker run -p 5000:5000 -v $(pwd)/output:/app/output shop-parser
+```
+
+### Automated Deployment
+
+```bash
+# Use deployment script (installs Docker automatically)
+bash deploy.sh
 ```
 
 ### Production Deployment

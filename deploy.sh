@@ -9,11 +9,19 @@ echo "🚀 Starting Shop Parser deployment..."
 # Check if Docker is installed
 if ! command -v docker &> /dev/null; then
     echo "❌ Docker is not installed."
-    if [ -f "install-docker.sh" ]; then
+    if command -v snap &> /dev/null; then
+        echo "🔧 Installing Docker via snap (recommended)..."
+        sudo snap install docker
+        sudo snap start docker
+        sudo groupadd docker 2>/dev/null || true
+        sudo usermod -aG docker $USER
+        echo "✅ Docker installed! Please log out and log back in, or run: newgrp docker"
+    elif [ -f "install-docker.sh" ]; then
         echo "🔧 Running Docker installation script..."
         bash install-docker.sh
     else
-        echo "Please install Docker first or run the installation script."
+        echo "Please install Docker manually or use snap."
+        echo "Quick install: sudo snap install docker && sudo snap start docker"
         exit 1
     fi
 fi
