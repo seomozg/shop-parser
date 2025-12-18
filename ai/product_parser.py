@@ -25,19 +25,26 @@ class ProductParser:
 
         print(f"Extracted product: {product_data.get('title', 'Unknown')}")
 
-        # Process images from structured data
-        structured_images = product_data.get('images', [])
-        processed_images = []
+        # Get filtered images from raw HTML content
+        filtered_images = self.image_extractor.extract_product_images(raw_content, page_url)
 
-        for img_url in structured_images[:5]:  # Limit to 5 images
-            if img_url and isinstance(img_url, str):
-                processed_images.append({
-                    'url': img_url,
-                    'alt': '',
-                    'filename': self.image_extractor._generate_filename(img_url)
-                })
+        # If no filtered images, fall back to structured data images
+        if not filtered_images:
+            structured_images = product_data.get('images', [])
+            processed_images = []
 
-        product_data['images'] = processed_images
+            for img_url in structured_images[:5]:  # Limit to 5 images
+                if img_url and isinstance(img_url, str):
+                    processed_images.append({
+                        'url': img_url,
+                        'alt': '',
+                        'filename': self.image_extractor._generate_filename(img_url)
+                    })
+
+            product_data['images'] = processed_images
+        else:
+            # Use filtered images from HTML
+            product_data['images'] = filtered_images
         product_data['url'] = page_url
 
         # Clean and normalize data

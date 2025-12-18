@@ -563,6 +563,20 @@ def run_product_parsing():
     global parsing_status
 
     try:
+        # Clean up old images before starting new parsing
+        import shutil
+        images_dir = 'output/images'
+        if os.path.exists(images_dir):
+            parsing_status['message'] = 'Очистка старых изображений...'
+            print(f"DEBUG: Found existing images directory, cleaning up...")
+            shutil.rmtree(images_dir)
+            os.makedirs(images_dir, exist_ok=True)
+            print("DEBUG: Successfully cleaned up old images directory")
+        else:
+            print(f"DEBUG: Images directory does not exist, creating new one...")
+            os.makedirs(images_dir, exist_ok=True)
+            print("DEBUG: Created new images directory")
+
         # Read filtered URLs
         filtered_urls_file = 'output/filtered_product_urls.txt'
         with open(filtered_urls_file, 'r', encoding='utf-8') as f:
@@ -779,6 +793,22 @@ URL LIST:
 
 if __name__ == '__main__':
     print("Starting web interface...")
+
+    # Clean up old images on startup
+    import shutil
+    images_dir = 'output/images'
+    if os.path.exists(images_dir):
+        print("Cleaning up old images from previous sessions...")
+        try:
+            shutil.rmtree(images_dir)
+            os.makedirs(images_dir, exist_ok=True)
+            print("✅ Successfully cleaned up old images directory")
+        except Exception as e:
+            print(f"⚠️  Warning: Could not clean up images directory: {e}")
+    else:
+        print("No old images directory found - creating new one...")
+        os.makedirs(images_dir, exist_ok=True)
+
     print("Open http://localhost:5000 in your browser")
 
     # Check for required environment variables

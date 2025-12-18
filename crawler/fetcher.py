@@ -10,11 +10,10 @@ class PageFetcher:
 
     def __enter__(self):
         self.playwright = sync_playwright().start()
-        # Use system Chromium with new headless mode
+        # Use Playwright's bundled Chromium
         self.browser = self.playwright.chromium.launch(
-            executable_path="/usr/bin/chromium",  # System Chromium path
+            headless=True,
             args=[
-                '--headless=new',  # Use new headless mode
                 '--no-sandbox',
                 '--disable-dev-shm-usage',
                 '--disable-gpu'
