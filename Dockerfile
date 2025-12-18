@@ -14,7 +14,10 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Chromium browser manually
+# Install Playwright browsers
+RUN playwright install --with-deps chromium
+
+# Install Chromium browser manually (fallback)
 RUN apt-get update && apt-get install -y \
     chromium \
     && rm -rf /var/lib/apt/lists/*
