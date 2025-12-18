@@ -53,13 +53,17 @@ if [ ! -f .env ]; then
     exit 1
 fi
 
+# Install Playwright browsers
+echo "🎭 Installing Playwright browsers..."
+playwright install --yes || echo "⚠️  Playwright browser installation failed, but continuing..."
+
 # Stop existing containers
 echo "🛑 Stopping existing containers..."
-docker-compose down || true
+$DOCKER_COMPOSE_CMD down || true
 
 # Build and start containers
 echo "🏗️  Building and starting containers..."
-docker-compose up -d --build
+$DOCKER_COMPOSE_CMD up -d --build
 
 # Wait for service to be ready
 echo "⏳ Waiting for service to be ready..."
