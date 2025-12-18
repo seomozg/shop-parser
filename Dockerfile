@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.11
 
 # Set working directory
 WORKDIR /app
@@ -6,6 +6,8 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
+    wget \
+    gnupg \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
@@ -14,12 +16,12 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Playwright browsers
-RUN playwright install --with-deps chromium
+# Install Playwright browsers (skip system deps installation)
+RUN playwright install chromium
 
 # Install Chromium browser manually (fallback)
 RUN apt-get update && apt-get install -y \
-    chromium \
+    chromium-browser \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy application code
