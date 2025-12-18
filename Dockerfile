@@ -19,11 +19,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Install Playwright browsers (skip system deps installation)
 RUN playwright install chromium
 
-# Install Chromium browser manually (fallback)
-RUN apt-get update && apt-get install -y \
-    chromium-browser \
-    && rm -rf /var/lib/apt/lists/*
-
 # Copy application code
 COPY . .
 
