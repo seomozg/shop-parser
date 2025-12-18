@@ -25,7 +25,6 @@ RUN apt-get update && apt-get install -y \
     libasound2 \
     libgtk-3-0 \
     libxss1 \
-    libgconf-2-4 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
