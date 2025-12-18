@@ -53,9 +53,13 @@ if [ ! -f .env ]; then
     exit 1
 fi
 
-# Install Playwright browsers
+# Install Playwright browsers (local development)
 echo "🎭 Installing Playwright browsers..."
-playwright install --yes || echo "⚠️  Playwright browser installation failed, but continuing..."
+if command -v playwright &> /dev/null; then
+    playwright install --yes || echo "⚠️  Local Playwright browser installation failed, but continuing..."
+else
+    echo "ℹ️  Playwright not available locally - browsers will be installed in Docker container"
+fi
 
 # Stop existing containers
 echo "🛑 Stopping existing containers..."
@@ -65,9 +69,15 @@ $DOCKER_COMPOSE_CMD down || true
 echo "🏗️  Building and starting containers..."
 $DOCKER_COMPOSE_CMD up -d --build
 
-# Wait for service to be ready
+# Wait for service to be ready and ensure browsers are installed
 echo "⏳ Waiting for service to be ready..."
-sleep 10
+sleep 15
+
+# Check if container is running and install browsers if needed
+if $DOCKER_COMPOSE_CMD ps | grep -q "shop-parser"; then
+    echo "🔧 Ensuring Playwright browsers are installed in container..."
+    $DOCKER_COMPOSE_CMD exec -T shop-parser playwright install chromium --force || echo "⚠️  Browser installation in container failed, but continuing..."
+fi
 
 # Check if service is running
 if curl -f http://localhost:5000 &>/dev/null; then
