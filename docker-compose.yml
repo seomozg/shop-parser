@@ -10,6 +10,7 @@ services:
     environment:
       - FLASK_ENV=production
       - PYTHONUNBUFFERED=1
+      - PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000"]
